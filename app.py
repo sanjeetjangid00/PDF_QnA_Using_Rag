@@ -1,0 +1,86 @@
+import os
+import re
+import streamlit as st
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import FAISS
+from langchain.chains import RetrievalQA
+from dotenv import load_dotenv
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_google_genai import ChatGoogleGenerativeAI
+
+load_dotenv()
+
+os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
+
+
+#clean text data
+def clean_text(text):
+    text = re.sub(r"\s+", " ", text) 
+    text = re.sub(r"[^\w\s.,!?-]", "", text)
+    return text.strip()
+
+# Process PDF and clean the data
+def process_pdf(file_path):
+    loader = PyPDFLoader(file_path)
+    documents = loader.load()
+
+    # cleaning data
+    for doc in documents:
+        doc.page_content = clean_text(doc.page_content)
+
+    # split into smaller chunks
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=200)
+    texts = text_splitter.split_documents(documents)
+    return texts
+
+
+# Create FAISS vector store
+def create_vector_store(texts):
+    
+    embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    vector_store = FAISS.from_documents(texts, embedding)
+    return vector_store
+
+# Build QA Chain
+def build_qa_chain(vector_store):
+    retriever = vector_store.as_retriever(search_type = 'similarity', search_k = 5)
+    llm = ChatGoogleGenerativeAI(model = 'gemini-1.5-flash')
+    qa_chain = RetrievalQA.from_chain_type(llm = llm, retriever = retriever, return_source_documents = True)
+    return qa_chain
+
+# Streamlit app
+def main():
+    st.write('<h1 style="text-align: center; color: blue;">PDF QnA Chatbot</h1>', unsafe_allow_html=True)
+    uploaded_file = st.file_uploader('Upload your PDF file', type = ['pdf'])
+    a = 'fails'
+    if uploaded_file:
+        with open("temp.pdf", 'wb') as f:
+            f.write(uploaded_file.getbuffer())
+        st.success("File uploaded successfully.....")
+        texts = process_pdf("temp.pdf")
+        with st.spinner("Processing PDF..."):
+            vectorstore = create_vector_store(texts)
+            qa_chain = build_qa_chain(vectorstore)
+        a = 'success'
+        st.success("Chatbot is ready....")
+
+        #Query chatbot
+        
+        st.write("Ask a question....")
+        user_query = st.text_input("Your Question...")
+        if user_query:
+            with st.spinner("Generating Answer...."):
+                response = qa_chain({"query" : user_query})
+                st.write("### Answer:")
+                st.write(response['result'])
+
+        else:
+            st.info("Please ask a question to get started.....")
+            
+            
+    else:
+        st.info("Please upload a PDF to get started......")
+        a = 'fails'
+if __name__ == '__main__':
+    main()
