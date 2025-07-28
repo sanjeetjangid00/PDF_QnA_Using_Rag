@@ -7,7 +7,7 @@ from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from dotenv import load_dotenv
 
-from langchain_google_genai import ChatGoogleGenerativeAI, ChatGoogleGenerativeAIEmbeddings
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 load_dotenv()
 
@@ -41,7 +41,7 @@ def process_pdf(file_path):
 # Create FAISS vector store
 def create_vector_store(texts):
     
-    embedding = ChatGoogleGenerativeAIEmbeddings(model="gemini-embedding-001")
+    embedding = ChatGoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
     vector_store = FAISS.from_documents(texts, embedding)
     return vector_store
 
