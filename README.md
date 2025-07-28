@@ -37,7 +37,9 @@ A Streamlit-powered chatbot that lets you ask questions from any PDF document us
 📷 Screenshot
 (Add a screenshot or screen recording of your app in action here)
 
-streamlit run app.py
+![rag 1](https://github.com/user-attachments/assets/8d1bd7d6-7aa3-41b5-99e5-826a538f1a47)
+![rag2](https://github.com/user-attachments/assets/bd49b3f1-1099-4a92-a5c0-a6195263a4f4)
+
 ⚠️ Requirements
 - Python 3.8+
 - Google Generative AI API key (Gemini)
