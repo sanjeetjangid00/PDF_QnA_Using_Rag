@@ -6,3 +6,4 @@ faiss-cpu
 python-dotenv
 langchain-community
 langchain-google-genai
+langchain-huggingface
