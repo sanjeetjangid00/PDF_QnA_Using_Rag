@@ -1,6 +1,8 @@
 # 📄 PDF QnA Chatbot 🤖
 A Streamlit-powered chatbot that lets you ask questions from any PDF document using LangChain, Google Gemini (via Generative AI), FAISS, and Hugging Face Embeddings. Just upload your PDF, and start chatting with your documents in real-time!
 
+### App Link: https://l2imldwvedqfau6dvtaaij.streamlit.app/
+
 🚀 Features
 ✅ Upload any PDF and instantly make it searchable and queryable
 ✅ Intelligent text cleaning and chunking using LangChain
