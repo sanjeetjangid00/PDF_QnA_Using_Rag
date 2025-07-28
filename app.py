@@ -11,8 +11,11 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 load_dotenv()
 
-os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
-
+LANGCHAIN_API_KEY = st.secrets["LANGCHAIN_API_KEY"]
+LANGCHAIN_PROJECT = st.secrets["LANGCHAIN_PROJECT"]
+LANGCHAIN_ENDPOINT = st.secrets["LANGCHAIN_ENDPOINT"]
+LANGCHAIN_TRACING_V2 = st.secrets["LANGCHAIN_TRACING_V2"]
+GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 
 #clean text data
 def clean_text(text):
