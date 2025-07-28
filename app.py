@@ -6,8 +6,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from dotenv import load_dotenv
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_google_genai import ChatGoogleGenerativeAI
+
+from langchain_google_genai import ChatGoogleGenerativeAI, ChatGoogleGenerativeAIEmbeddings
 
 load_dotenv()
 
@@ -41,7 +41,7 @@ def process_pdf(file_path):
 # Create FAISS vector store
 def create_vector_store(texts):
     
-    embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    embedding = ChatGoogleGenerativeAIEmbeddings(model="gemini-embedding-001")
     vector_store = FAISS.from_documents(texts, embedding)
     return vector_store
 
