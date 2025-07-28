@@ -38,7 +38,8 @@ A Streamlit-powered chatbot that lets you ask questions from any PDF document us
 (Add a screenshot or screen recording of your app in action here)
 
 ![rag 1](https://github.com/user-attachments/assets/8d1bd7d6-7aa3-41b5-99e5-826a538f1a47)
-![rag2](https://github.com/user-attachments/assets/9a8d716f-f2e8-4a6a-85f7-ec520c979730)
+![rag2](https://github.com/user-attachments/assets/8a380ffc-695e-4230-adf6-8d17ff2babdd)
+
 
 
 ⚠️ Requirements
