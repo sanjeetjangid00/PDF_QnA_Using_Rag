@@ -41,7 +41,7 @@ def process_pdf(file_path):
 # Create FAISS vector store
 def create_vector_store(texts):
     
-    embedding = ChatGoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
+    embedding = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
     vector_store = FAISS.from_documents(texts, embedding)
     return vector_store
 
