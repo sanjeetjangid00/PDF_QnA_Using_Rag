@@ -61,15 +61,15 @@ def main():
     uploaded_file = st.file_uploader('Upload your PDF file', type = ['pdf'])
     a = 'fails'
     if uploaded_file:
-        with open("temp.pdf", 'wb') as f:
-            f.write(uploaded_file.getbuffer())
-        st.success("File uploaded successfully.....")
-        texts = process_pdf("temp.pdf")
-        with st.spinner("Processing PDF..."):
-            vectorstore = create_vector_store(texts)
-            qa_chain = build_qa_chain(vectorstore)
-        a = 'success'
-        st.success("Chatbot is ready....")
+        if "qa_chain" not in st.session_state:  # ✅ Only first time banega
+            with open("temp.pdf", 'wb') as f:
+                f.write(uploaded_file.getbuffer())
+            st.success("File uploaded successfully.....")
+            with st.spinner("Processing PDF..."):
+                texts = process_pdf("temp.pdf")
+                vectorstore = create_vector_store(texts)
+                st.session_state.qa_chain = build_qa_chain(vectorstore)  # save in session
+            st.success("Chatbot is ready....")
 
         #Query chatbot
         
@@ -90,4 +90,5 @@ def main():
         a = 'fails'
 if __name__ == '__main__':
     main()
+
 
