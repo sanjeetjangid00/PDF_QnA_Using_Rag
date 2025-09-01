@@ -17,6 +17,8 @@ LANGCHAIN_ENDPOINT = st.secrets["LANGCHAIN_ENDPOINT"]
 LANGCHAIN_TRACING_V2 = st.secrets["LANGCHAIN_TRACING_V2"]
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 
+load_dotenv()
+
 #clean text data
 @traceable(name = 'clean_text')
 def clean_text(text):
@@ -30,15 +32,12 @@ def process_pdf(file_path):
     loader = PyPDFLoader(file_path)
     documents = loader.load()
 
-    # cleaning data
     for doc in documents:
         doc.page_content = clean_text(doc.page_content)
 
-    # split into smaller chunks
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=200)
     texts = text_splitter.split_documents(documents)
     return texts
-
 
 # Create FAISS vector store
 @traceable(name = 'creating_vector_store')
@@ -58,8 +57,8 @@ def build_qa_chain(vector_store):
 # Streamlit app
 def main():
     st.write('<h1 style="text-align: center; color: blue;">PDF QnA Chatbot</h1>', unsafe_allow_html=True)
-    uploaded_file = st.file_uploader('Upload your PDF file', type = ['pdf'])
-    a = 'fails'
+    uploaded_file = st.file_uploader('Upload your PDF file', type=['pdf'])
+
     if uploaded_file:
         if "qa_chain" not in st.session_state:  # ✅ Only first time banega
             with open("temp.pdf", 'wb') as f:
@@ -71,24 +70,18 @@ def main():
                 st.session_state.qa_chain = build_qa_chain(vectorstore)  # save in session
             st.success("Chatbot is ready....")
 
-        #Query chatbot
-        
+        # Query chatbot
         st.write("Ask a question....")
         user_query = st.text_input("Your Question...")
         if user_query:
             with st.spinner("Generating Answer...."):
-                response = qa_chain({"query" : user_query})
+                response = st.session_state.qa_chain({"query": user_query})
                 st.write("### Answer:")
                 st.write(response['result'])
-
         else:
             st.info("Please ask a question to get started.....")
-            
-            
     else:
         st.info("Please upload a PDF to get started......")
-        a = 'fails'
+
 if __name__ == '__main__':
     main()
-
-
