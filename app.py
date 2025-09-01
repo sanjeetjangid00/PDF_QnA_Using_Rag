@@ -8,6 +8,7 @@ from langchain.chains import RetrievalQA
 from dotenv import load_dotenv
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langsmith import traceable
 load_dotenv()
 
 LANGCHAIN_API_KEY = st.secrets["LANGCHAIN_API_KEY"]
@@ -17,12 +18,14 @@ LANGCHAIN_TRACING_V2 = st.secrets["LANGCHAIN_TRACING_V2"]
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 
 #clean text data
+@traceable(name = 'clean_text')
 def clean_text(text):
     text = re.sub(r"\s+", " ", text) 
     text = re.sub(r"[^\w\s.,!?-]", "", text)
     return text.strip()
 
 # Process PDF and clean the data
+@traceable(name = 'load_pdf')
 def process_pdf(file_path):
     loader = PyPDFLoader(file_path)
     documents = loader.load()
@@ -38,12 +41,14 @@ def process_pdf(file_path):
 
 
 # Create FAISS vector store
+@traceable(name = 'creating_vector_store')
 def create_vector_store(texts):
     embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     vector_store = FAISS.from_documents(texts, embedding)
     return vector_store
 
 # Build QA Chain
+@traceable(name = 'retrieving_&_generating')
 def build_qa_chain(vector_store):
     retriever = vector_store.as_retriever(search_type = 'similarity', search_k = 5)
     llm = ChatGoogleGenerativeAI(model = 'gemini-1.5-flash')
@@ -85,3 +90,4 @@ def main():
         a = 'fails'
 if __name__ == '__main__':
     main()
+
