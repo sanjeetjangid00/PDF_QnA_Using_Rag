@@ -37,9 +37,13 @@ def process_pdf(file_path):
     return texts
 
 @traceable(name='creating_vector_store')
-def create_vector_store(texts):
+def create_vector_store(texts, persist_directory="chroma_store"):
     embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    vector_store = FAISS.from_documents(texts, embedding)
+    if os.path.exists(persist_directory):
+        vector_store = Chroma(persist_directory=persist_directory, embedding_function=embedding)
+    else:
+        vector_store = Chroma.from_documents(texts, embedding, persist_directory=persist_directory)
+        vector_store.persist()
     return vector_store
 
 @traceable(name='retrieving_&_generating')
@@ -82,3 +86,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
