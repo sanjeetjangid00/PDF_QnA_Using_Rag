@@ -65,28 +65,33 @@ def main():
             f.write(uploaded_file.getbuffer())
         st.success("File uploaded successfully.....")
         texts = process_pdf("temp.pdf")
-        with st.spinner("Processing PDF..."):
-            vectorstore = create_vector_store(texts)
-            qa_chain = build_qa_chain(vectorstore)
-        a = 'success'
-        st.success("Chatbot is ready....")
-
-        #Query chatbot
-        
-        st.write("Ask a question....")
-        user_query = st.text_input("Your Question...")
-        if user_query:
-            with st.spinner("Generating Answer...."):
-                response = qa_chain({"query" : user_query})
-                st.write("### Answer:")
-                st.write(response['result'])
+        if 'faiss' not in st.session_state:
+            with st.spinner("Processing PDF..."):
+                vectorstore = create_vector_store(texts)
+                qa_chain = build_qa_chain(vectorstore)
+            a = 'success'
+            st.success("Chatbot is ready....")
 
         else:
-            st.info("Please ask a question to get started.....")
+            st.info("Using existing vector DB.")
+        if 'faiss' in st.session_state:
+            vectorstore = st.session_state['faiss']
+            st.write("Ask a question....")
+            user_query = st.text_input("Your Question...")
+            if user_query:
+                with st.spinner("Generating Answer...."):
+                    response = qa_chain({"query" : user_query})
+                    st.write("### Answer:")
+                    st.write(response['result'])
+    
+            else:
+                st.info("Please ask a question to get started.....")
             
             
     else:
         st.info("Please upload a PDF to get started......")
+        st.session_state.pop('faiss', None)
         a = 'fails'
 if __name__ == '__main__':
     main()
+
