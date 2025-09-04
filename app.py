@@ -75,8 +75,8 @@ def main():
         else:
             st.info("Using existing vector DB.")
         if 'faiss' in st.session_state:
-            qa_chain = build_qa_chain(vectorstore)
             vectorstore = st.session_state['faiss']
+            qa_chain = build_qa_chain(vectorstore)
             st.write("Ask a question....")
             user_query = st.text_input("Your Question...")
             if user_query:
@@ -95,6 +95,7 @@ def main():
         a = 'fails'
 if __name__ == '__main__':
     main()
+
 
 
 
