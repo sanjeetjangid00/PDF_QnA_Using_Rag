@@ -68,7 +68,6 @@ def main():
         if 'faiss' not in st.session_state:
             with st.spinner("Processing PDF..."):
                 vectorstore = create_vector_store(texts)
-                qa_chain = build_qa_chain(vectorstore)
                 st.session_state['faiss'] = vectorstore
             a = 'success'
             st.success("Chatbot is ready....")
@@ -76,6 +75,7 @@ def main():
         else:
             st.info("Using existing vector DB.")
         if 'faiss' in st.session_state:
+            qa_chain = build_qa_chain(vectorstore)
             vectorstore = st.session_state['faiss']
             st.write("Ask a question....")
             user_query = st.text_input("Your Question...")
@@ -95,5 +95,6 @@ def main():
         a = 'fails'
 if __name__ == '__main__':
     main()
+
 
 
