@@ -69,6 +69,7 @@ def main():
             with st.spinner("Processing PDF..."):
                 vectorstore = create_vector_store(texts)
                 qa_chain = build_qa_chain(vectorstore)
+                st.session_state['faiss'] = vectorstore
             a = 'success'
             st.success("Chatbot is ready....")
 
@@ -94,4 +95,5 @@ def main():
         a = 'fails'
 if __name__ == '__main__':
     main()
+
 
