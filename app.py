@@ -2,7 +2,7 @@ import os
 import re
 import streamlit as st
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from dotenv import load_dotenv
@@ -95,6 +95,7 @@ def main():
         a = 'fails'
 if __name__ == '__main__':
     main()
+
 
 
 
