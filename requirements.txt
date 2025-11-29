@@ -9,3 +9,5 @@ langchain-google-genai
 langchain-huggingface
 sentence-transformers
 langsmith
+langchain-text-splitters
+
