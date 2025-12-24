@@ -1,19 +1,15 @@
 streamlit
-
 openai
 pypdf
 faiss-cpu
 python-dotenv
-langchain-community
+
+langchain<0.3
+langchain-core<0.3
+langchain-community<0.3
+langchain-text-splitters
 langchain-google-genai
 langchain-huggingface==0.2.2
-langchain-core<0.3
-langchain<0.3
 
 sentence-transformers
 langsmith
-langchain-text-splitters
-
-
-
-
