@@ -169,7 +169,7 @@ def main():
                         st.markdown("**Source snippets (top 3):**")
                         for i, d in enumerate(top_docs, start=1):
                             snippet = d.page_content if hasattr(d, "page_content") else str(d)
-                            st.markdown(f"**Source {i}:** {snippet[:1000]}")  # show first 1000 chars
+                            #st.markdown(f"**Source {i}:** {snippet[:1000]}")  # show first 1000 chars
                 except Exception:
                     # some FAISS wrappers use different method names; ignore on failure
                     pass
@@ -183,5 +183,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
