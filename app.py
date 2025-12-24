@@ -135,7 +135,7 @@ def main():
             with st.spinner("Generating answer..."):
                 # invoke the runnable. we pass a dict with 'question' to be explicit.
                 try:
-                    raw_resp = qa_chain.invoke({"question": user_query})
+                    raw_resp = qa_chain.invoke(user_query)
                 except TypeError:
                     # fallback: pass string directly (some versions accept direct input)
                     raw_resp = qa_chain.invoke(user_query)
@@ -186,3 +186,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
