@@ -6,7 +6,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from dotenv import load_dotenv
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langsmith import traceable
 load_dotenv()
@@ -95,6 +95,7 @@ def main():
         a = 'fails'
 if __name__ == '__main__':
     main()
+
 
 
 
