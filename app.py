@@ -32,7 +32,7 @@ GOOGLE_API_KEY = st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
 @traceable(name='clean_text')
 def clean_text(text: str) -> str:
     text = re.sub(r"\s+", " ", text)
-    text = re.sub(r"[^\w\s.,!?-]", "", text)
+#    text = re.sub(r"[^\w\s.,!?-]", "", text)
     return text.strip()
 
 # --------------- PDF processing ---------------
@@ -171,6 +171,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
