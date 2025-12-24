@@ -10,7 +10,7 @@ from langchain_community.vectorstores import FAISS
 
 # embeddings + LLM
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 
 # LCEL (runnable-based) pieces
 from langchain_core.prompts import ChatPromptTemplate
@@ -66,10 +66,7 @@ def build_qa_chain(vector_store):
     )
 
     # instantiate LLM (Gemini)
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
-        google_api_key=GOOGLE_API_KEY
-    )
+    llm = ChatGroq(model="openai/gpt-oss-20b")
 
     # simple prompt that accepts {context} and {question}
     prompt = ChatPromptTemplate.from_template(
@@ -186,4 +183,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
