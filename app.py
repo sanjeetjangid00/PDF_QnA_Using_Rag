@@ -29,11 +29,11 @@ LANGCHAIN_TRACING_V2 = st.secrets.get("LANGCHAIN_TRACING_V2") or os.getenv("LANG
 GOOGLE_API_KEY = st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
 
 # --------------- utilities ---------------
-@traceable(name='clean_text')
-def clean_text(text: str) -> str:
-    text = re.sub(r"\s+", " ", text)
-#    text = re.sub(r"[^\w\s.,!?-]", "", text)
-    return text.strip()
+# @traceable(name='clean_text')
+# def clean_text(text: str) -> str:
+#     text = re.sub(r"\s+", " ", text)
+# #    text = re.sub(r"[^\w\s.,!?-]", "", text)
+#     return text.strip()
 
 # --------------- PDF processing ---------------
 @traceable(name='load_pdf')
@@ -41,17 +41,16 @@ def process_pdf(file_path: str):
     loader = PyPDFLoader(file_path)
     documents = loader.load()
 
-    for doc in documents:
-        doc.page_content = clean_text(doc.page_content)
+    # for doc in documents:
+    #     doc.page_content = clean_text(doc.page_content)
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=200)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=80)
     texts = text_splitter.split_documents(documents)
     return texts
 
 # --------------- vector store creation ---------------
 @traceable(name='creating_vector_store')
 def create_vector_store(texts):
-    # model_name can be changed if needed
     embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     vector_store = FAISS.from_documents(texts, embedding)
     return vector_store
@@ -59,7 +58,7 @@ def create_vector_store(texts):
 # --------------- build runnable RAG chain ---------------
 @traceable(name='retrieving_&_generating')
 def build_qa_chain(vector_store):
-    # build retriever from FAISS
+    
     retriever = vector_store.as_retriever(
         search_type="similarity",
         search_kwargs={"k": 5}
@@ -82,11 +81,10 @@ def build_qa_chain(vector_store):
         """
     )
 
-    # Build LCEL runnable: map "context" to retriever, "question" passes through to prompt
     rag_chain = (
         {
-            "context": retriever,              # retriever will be called by the runnable system
-            "question": RunnablePassthrough()  # passthrough for the user question
+            "context": retriever,             
+            "question": RunnablePassthrough() 
         }
         | prompt
         | llm
@@ -171,6 +169,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
