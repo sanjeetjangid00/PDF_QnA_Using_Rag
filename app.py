@@ -111,7 +111,7 @@ def main():
             with st.spinner("Processing PDF and building vector store..."):
                 vectorstore = create_vector_store(texts)
                 st.session_state['faiss'] = vectorstore
-            st.success("Chatbot is ready.")
+                st.success("Chatbot is ready.")
         else:
             st.info("Using existing vector DB.")
 
@@ -169,6 +169,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
