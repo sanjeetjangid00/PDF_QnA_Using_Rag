@@ -22,11 +22,10 @@ from langsmith import traceable
 load_dotenv()
 
 # --- Secrets / env (Streamlit secrets or .env) ---
-LANGCHAIN_API_KEY = st.secrets.get("LANGCHAIN_API_KEY") or os.getenv("LANGCHAIN_API_KEY")
-LANGCHAIN_PROJECT = st.secrets.get("LANGCHAIN_PROJECT") or os.getenv("LANGCHAIN_PROJECT")
-LANGCHAIN_ENDPOINT = st.secrets.get("LANGCHAIN_ENDPOINT") or os.getenv("LANGCHAIN_ENDPOINT")
-LANGCHAIN_TRACING_V2 = st.secrets.get("LANGCHAIN_TRACING_V2") or os.getenv("LANGCHAIN_TRACING_V2")
-GOOGLE_API_KEY = st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
+LANGCHAIN_API_KEY = st.secrets.get("LANGCHAIN_API_KEY")
+LANGCHAIN_PROJECT = st.secrets.get("LANGCHAIN_PROJECT")
+LANGCHAIN_ENDPOINT = st.secrets.get("LANGCHAIN_ENDPOINT")
+LANGCHAIN_TRACING_V2 = st.secrets.get("LANGCHAIN_TRACING_V2")
 
 # --------------- utilities ---------------
 # @traceable(name='clean_text')
@@ -124,7 +123,7 @@ def main():
         qa_chain = build_qa_chain(vectorstore)
 
         st.write("Ask a question:")
-        user_query = st.text_input("Your Question...")
+        user_query = st.chat_input("Your Question...")
 
         if user_query:
             with st.spinner("Generating answer..."):
@@ -169,6 +168,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
