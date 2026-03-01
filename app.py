@@ -106,8 +106,8 @@ def main():
     uploaded_file = st.file_uploader('Upload your document file', type=['pdf', 'txt', 'docx'])
     if uploaded_file:
         # save temp pdf
-        file_extenssion = uploaded_file.split(".")[-1]
-        temp_path = "temp."+file_extenssion
+        file_extension = uploaded_file.name.split(".")[-1].lower()
+        temp_path = f"temp.{file_extension}"
         with open(temp_path, 'wb') as f:
             f.write(uploaded_file.getbuffer())
 
@@ -176,6 +176,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
