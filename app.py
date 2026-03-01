@@ -4,7 +4,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 # loaders / text splitters / vectorstores
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader, TextLoader, Docx2txtLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 
@@ -36,9 +36,16 @@ LANGCHAIN_TRACING_V2 = st.secrets.get("LANGCHAIN_TRACING_V2")
 
 # --------------- PDF processing ---------------
 @traceable(name='load_pdf')
-def process_pdf(file_path: str):
-    loader = PyPDFLoader(file_path)
-    documents = loader.load()
+def process_document(file_path: str):
+    file_extenssion = file_path.split(".")[-1]
+    if file_extenssion == "pdf":
+      pdf = PyPDFLoader(file_path)
+      documents = pdf.load()
+    elif file_extenssion == "txt":
+      documents = TextLoader(file_path).load()
+    else:
+        documents = Docx2txtLoader(file_path).load()
+        
 
     # for doc in documents:
     #     doc.page_content = clean_text(doc.page_content)
@@ -168,6 +175,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
