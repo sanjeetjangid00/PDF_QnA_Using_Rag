@@ -1,6 +1,8 @@
 streamlit
 openai
 pypdf
+docx2text
+textloader
 faiss-cpu
 python-dotenv
 
@@ -13,5 +15,7 @@ langchain-huggingface
 
 sentence-transformers
 langsmith
+
+
 
 
