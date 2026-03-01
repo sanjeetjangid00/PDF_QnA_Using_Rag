@@ -125,7 +125,7 @@ def main():
         # build chain each run (cheap), or cache if you prefer
         vectorstore = st.session_state.get('faiss')
         if vectorstore is None:
-            st.error("Vector store missing. Re-upload the PDF.")
+            st.error("Vector store missing. Re-upload the document.")
             return
 
         qa_chain = build_qa_chain(vectorstore)
@@ -170,12 +170,13 @@ def main():
         else:
             st.info("Please ask a question to get started.")
     else:
-        st.info("Please upload a PDF to get started.")
+        st.info("Please upload a document to get started.")
         st.session_state.pop('faiss', None)
 
 
 if __name__ == '__main__':
     main()
+
 
 
 
