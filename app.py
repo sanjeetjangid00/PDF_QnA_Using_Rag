@@ -43,7 +43,7 @@ def process_document(file_path: str):
       documents = pdf.load()
     elif file_extenssion == "txt":
       documents = TextLoader(file_path).load()
-    else:
+    elif file_extenssion == 'docx':
         documents = Docx2txtLoader(file_path).load()
         
 
@@ -106,6 +106,7 @@ def main():
     uploaded_file = st.file_uploader('Upload your document file', type=['pdf', 'txt', 'docx'])
     if uploaded_file:
         # save temp pdf
+        file_extenssion = uploaded_file.split(".")[-1]
         temp_path = "temp."+file_extenssion
         with open(temp_path, 'wb') as f:
             f.write(uploaded_file.getbuffer())
@@ -114,7 +115,7 @@ def main():
         texts = process_document(temp_path)
 
         if 'faiss' not in st.session_state:
-            with st.spinner("Processing PDF and building vector store..."):
+            with st.spinner("Processing document and building vector store..."):
                 vectorstore = create_vector_store(texts)
                 st.session_state['faiss'] = vectorstore
                 st.success("Chatbot is ready.")
@@ -175,6 +176,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
