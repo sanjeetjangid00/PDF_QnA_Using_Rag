@@ -103,7 +103,7 @@ def main():
     st.set_page_config(page_title="PDF QnA Chatbot", layout="wide")
     st.markdown('<h1 style="text-align: center; color: blue;">PDF QnA Chatbot</h1>', unsafe_allow_html=True)
 
-    uploaded_file = st.file_uploader('Upload your PDF file', type=['pdf'])
+    uploaded_file = st.file_uploader('Upload your PDF file', type=['pdf', 'txt', 'docx'])
     if uploaded_file:
         # save temp pdf
         temp_path = "temp.pdf"
@@ -175,6 +175,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
